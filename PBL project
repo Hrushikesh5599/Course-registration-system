@@ -1,0 +1,216 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_STUDENTS 10
+#define MAX_NAME_LENGTH 100
+#define MAX_EMAIL_LENGTH 100
+
+// Student structure
+typedef struct {
+    char firstName[MAX_NAME_LENGTH];
+    char lastName[MAX_NAME_LENGTH];
+    char dob[MAX_NAME_LENGTH];
+    char fatherName[MAX_NAME_LENGTH];
+    char motherName[MAX_NAME_LENGTH];
+    char email[MAX_EMAIL_LENGTH];
+    int courseCode;
+} Student;
+
+// Function prototypes
+void displayMenu();
+void studentRegistration();
+void facultyMenu();
+void adminMenu();
+void handleFormSubmit();
+void displayStudentList();
+void showSyllabus(int subjectCode);
+void clearForm();
+void displayMessage(const char* message);
+
+// Global variables
+Student students[MAX_STUDENTS];
+int studentCount = 0;
+
+int main() {
+    displayMenu();
+    return 0;
+}
+
+void displayMenu() {
+    int choice;
+   
+    printf("\nCOURSE REGISTRATION SYSTEM\n");
+    printf("Please Select Candidature:\n");
+    printf("1. STUDENT\n");
+    printf("2. FACULTY\n");
+    printf("3. ADMINISTRATOR\n");
+    printf("4. EXIT\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+   
+    switch(choice) {
+        case 1:
+            studentRegistration();
+            break;
+        case 2:
+            facultyMenu();
+            break;
+        case 3:
+            adminMenu();
+            break;
+        case 4:
+            exit(0);
+            break;
+        default:
+            printf("Invalid choice. Try again.\n");
+            displayMenu();
+            break;
+    }
+}
+
+void studentRegistration() {
+    char firstName[MAX_NAME_LENGTH], lastName[MAX_NAME_LENGTH], dob[MAX_NAME_LENGTH];
+    char fatherName[MAX_NAME_LENGTH], motherName[MAX_NAME_LENGTH], email[MAX_EMAIL_LENGTH];
+    int courseCode;
+
+    printf("\nStudent Registration Form\n");
+
+    // Get student details
+    printf("Enter First Name: ");
+    scanf("%s", firstName);
+    printf("Enter Last Name: ");
+    scanf("%s", lastName);
+    printf("Enter Date of Birth (YYYY-MM-DD): ");
+    scanf("%s", dob);
+    printf("Enter Father's Name: ");
+    scanf("%s", fatherName);
+    printf("Enter Mother's Name: ");
+    scanf("%s", motherName);
+    printf("Enter Email: ");
+    scanf("%s", email);
+   
+    printf("Select Course Code:\n");
+    printf("1. INFORMATION TECHNOLOGY (IT)\n");
+    printf("2. AI & DS\n");
+    printf("3. ENTC\n");
+    printf("4. MECHANICAL\n");
+    printf("Enter Course Code: ");
+    scanf("%d", &courseCode);
+
+    // Store student details
+    if (studentCount < MAX_STUDENTS) {
+        Student newStudent;
+        strcpy(newStudent.firstName, firstName);
+        strcpy(newStudent.lastName, lastName);
+        strcpy(newStudent.dob, dob);
+        strcpy(newStudent.fatherName, fatherName);
+        strcpy(newStudent.motherName, motherName);
+        strcpy(newStudent.email, email);
+        newStudent.courseCode = courseCode;
+       
+        students[studentCount++] = newStudent;
+        displayMessage("Student registered successfully!");
+    } else {
+        displayMessage("Maximum student limit reached.");
+    }
+
+    // Go back to menu
+    displayMenu();
+}
+
+void facultyMenu() {
+    int subjectCode;
+   
+    printf("\nFaculty Menu\n");
+    printf("Choose a Subject of Expertise:\n");
+    printf("1. Physics\n");
+    printf("2. Maths\n");
+    printf("3. Graphics\n");
+    printf("4. Programming\n");
+    printf("5. Electrical\n");
+    printf("6. Electronics\n");
+    printf("7. Chemistry\n");
+    printf("8. Geomatics\n");
+    printf("Enter Subject Code: ");
+    scanf("%d", &subjectCode);
+
+    showSyllabus(subjectCode);
+   
+    // Optionally schedule lectures (we'll skip for now)
+    printf("\nPress any key to go back to the main menu...\n");
+    getchar(); // To catch the extra newline
+    getchar();
+    displayMenu();
+}
+
+void adminMenu() {
+    printf("\nAdministrator Menu\n");
+    printf("As an administrator, you can view all registered students.\n");
+   
+    displayStudentList();
+   
+    // Go back to menu
+    displayMenu();
+}
+
+void showSyllabus(int subjectCode) {
+    printf("\nSyllabus for subject code %d:\n", subjectCode);
+
+    switch (subjectCode) {
+        case 1:
+            printf("Physics: Classical Mechanics, Quantum Mechanics, Optics\n");
+            break;
+        case 2:
+            printf("Maths: Calculus, Algebra, Trigonometry\n");
+            break;
+        case 3:
+            printf("Graphics: 2D Graphics, 3D Graphics, Animations\n");
+            break;
+        case 4:
+            printf("Programming: C, C++, Java, Python\n");
+            break;
+        case 5:
+            printf("Electrical: Circuits, Signals, Systems, Power Systems\n");
+            break;
+        case 6:
+            printf("Electronics: DC Power Supply, Transistors, Amplifiers, Sensors\n");
+            break;
+        case 7:
+            printf("Chemistry: Material Science, Green Chemistry, Electroanalytical Chemistry, Energy Systems\n");
+            break;
+        case 8:
+            printf("Geomatics: Remote Sensing, GIS and GPS, Digital Satellite Images\n");
+            break;
+        default:
+            printf("Invalid Subject Code.\n");
+            break;
+    }
+}
+
+void displayStudentList() {
+    if (studentCount == 0) {
+        printf("No students are registered yet.\n");
+        return;
+    }
+
+    printf("\nRegistered Students:\n");
+    for (int i = 0; i < studentCount; i++) {
+        printf("Student %d: %s %s\n", i+1, students[i].firstName, students[i].lastName);
+        printf("Date of Birth: %s\n", students[i].dob);
+        printf("Father's Name: %s\n", students[i].fatherName);
+        printf("Mother's Name: %s\n", students[i].motherName);
+        printf("Email: %s\n", students[i].email);
+        printf("Course: %d\n", students[i].courseCode);
+        printf("-----\n");
+    }
+}
+
+void displayMessage(const char* message) {
+    printf("\n%s\n", message);
+}
+
+void clearForm() {
+    // This is not strictly needed for a console-based application, but would be useful for any GUI-based approach
+    // Can be used to reset form inputs after submission in a GUI framework
+}
